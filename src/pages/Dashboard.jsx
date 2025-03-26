@@ -12,7 +12,7 @@ const Dashboard = () => {
             to="/profile" 
             className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors"
           >
-            My Profile
+            My Profile here
           </Link>
         </div>
         
