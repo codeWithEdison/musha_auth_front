@@ -18,7 +18,7 @@ const Dashboard = () => {
         
         <div className="mb-6 p-4 bg-blue-50 rounded-md">
           <p className="text-lg font-medium text-blue-800">
-            Welcome to the Admin Dashboard
+            Welcome to the project for Group 2 development Dashboard
           </p>
           <p className="text-gray-600 mt-1">
             You can view, edit, and delete user accounts from this panel.
