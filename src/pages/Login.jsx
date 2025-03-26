@@ -1,18 +1,52 @@
 // pages/Login.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import api from '../api';
 
 const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  
+
+  const handleLoging = async (e)=>{
+     e.preventDefault();
+     if(!username | !password){
+       setError('Please fill all fields');
+       
+     }
+     try{
+      setLoading(true); 
+      const response =  await api.post(
+        '/login', {username, password}
+      )
+      if(response.data){
+        localStorage.setItem('musha_front_token', response.data.token);
+        window.location.href = '/dashboard';
+        navigate('/dashboard');
+        
+      }
+
+     }catch(err){
+       setError(err.response?.data?.message || err.message);
+     }finally{
+       setLoading(false);
+     }
+  }
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
       <div className="px-6 py-8">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Login to Your Account</h2>
         
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          Invalid username or password. Please try again.
-        </div>
+        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>}
 
-        <form>
+        <form
+        onSubmit={handleLoging}
+        >
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
               Username
@@ -20,6 +54,8 @@ const Login = () => {
             <input
               type="text"
               id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               name="username"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-blue-500"
               placeholder="Username"
@@ -34,6 +70,8 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring focus:border-blue-500"
               placeholder="••••••••"
             />
@@ -63,7 +101,7 @@ const Login = () => {
               type="submit"
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             >
-              Login
+             {loading ? 'sign in ...':  'Login'}
             </button>
           </div>
         </form>
