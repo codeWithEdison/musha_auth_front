@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('');          
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,8 +19,7 @@ const Login = () => {
      }
      try{
       setLoading(true); 
-      const response =  await api.post(
-        '/login', {username, password}
+      const response =  await api.post('/api/auth/login', {username, password}
       )
       if(response.data){
         localStorage.setItem('musha_front_token', response.data.token);

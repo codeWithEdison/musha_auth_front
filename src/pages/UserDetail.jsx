@@ -1,9 +1,35 @@
 // pages/UserDetail.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import api from '../api';
+import { useParams } from 'react-router-dom';
 const UserDetail = () => {
+  const [userinfo,setuserinfor]=useState({})
+  const [errors,seterrors]=useState('')
+  const {id}=useParams()
+
+ const fetchuserbyid=async()=>{
+  try{
+   const response= await api.get('/user/'+id)
+   setuserinfor(response.data[0])
+     
+  }catch(err){
+    seterrors(err.response?.data?.message || err.message)
+  }
+
+
+ }
+
+useEffect(()=>{
+  fetchuserbyid()
+},[])
+
+useEffect(()=>{
+  console.log(userinfo)
+},[userinfo])
   return (
+
+    
     <div className="max-w-4xl mx-auto">
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <div className="px-6 py-8">
@@ -16,21 +42,23 @@ const UserDetail = () => {
 
           <div className="mb-6 p-4 bg-blue-50 rounded-md">
             <p className="text-lg font-medium text-blue-800">
-              User ID: 123
+              User ID: {id}
             </p>
           </div>
 
+
+           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 p-4 rounded-md">
               <h3 className="text-lg font-medium text-gray-800 mb-3">Account Information</h3>
               <div className="space-y-2">
                 <div className="flex">
-                  <span className="font-medium w-32">Username:</span>
-                  <span>john_doe</span>
+                  <span className="font-medium w-32">Username</span>
+                  <span>{userinfo.username}</span>
                 </div>
                 <div className="flex">
                   <span className="font-medium w-32">Email:</span>
-                  <span>john@example.com</span>
+                  <span>{userinfo.email}</span>
                 </div>
                 <div className="flex">
                   <span className="font-medium w-32">Status:</span>

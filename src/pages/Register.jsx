@@ -26,13 +26,11 @@ setFormData({
   ...formData,
   [name]: value
 })
-// num1 = [1,2,3]; num2 [3,4,5] =>  [...num1, ...num1]
   }
   const handleSubmit = async (e) =>{
     e.preventDefault();
     setErrors('');
 
-    // '' == 0 == null == undefined == false
     if( !formData.username || !formData.email 
       || !formData.password || !formData.confirmPassword){
 setErrors('all fields are required');
@@ -45,7 +43,7 @@ setErrors('all fields are required');
         setLoading(true);
         // remove confirm password
         let {confirmPassword, ...data} = formData;
-        const response = await api.post('/register', data);
+        const response = await api.post('/api/auth/signup', data);
         setLoading(false);
         if(response.data) {
           navigate('/login');
