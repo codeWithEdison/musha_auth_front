@@ -48,8 +48,9 @@ const EditUser = () => {
   }
 
   useEffect(()=>{
-    fetchUser(id)
-  }, [])
+    fetchUser(id);
+  },[]
+)
 
   if(error){
     return <div className="text-red-500 text-center">{error}</div>

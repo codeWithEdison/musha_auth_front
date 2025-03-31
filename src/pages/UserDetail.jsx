@@ -1,8 +1,42 @@
 // pages/UserDetail.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+// import { BiSolidCommentError } from 'react-icons/bi';
+import { Link, useParams } from 'react-router-dom';
+import api from '../api';
+
+
+
+
 
 const UserDetail = () => {
+
+  const {id} = useParams()
+  const [user,setUser] = useState({});
+  // const [username,setUsername] = useState('');
+  // const [email,setEmail] = useState('');
+  const [error,setError] = useState(false);
+
+  const fetchUsers = async () =>{
+    try{
+      const response = await api.get(`/users/${id}`);
+      setUser(response.data);
+      // setUsername(response.data.username);
+      // setEmail(response.data.email);
+      
+    }
+    catch(err){
+      setError(err.message);
+    }
+    
+    
+  }
+  useEffect(()=>{
+    fetchUsers(id)
+  },[])
+
+
+
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -11,12 +45,15 @@ const UserDetail = () => {
             <h2 className="text-2xl font-bold text-gray-800">User Details</h2>
             <Link to="/dashboard" className="text-blue-500 hover:text-blue-700">
               Back to Dashboard
+    
+
             </Link>
           </div>
+          {error && <span>{error}</span>}
 
-          <div className="mb-6 p-4 bg-blue-50 rounded-md">
+         <div className="mb-6 p-4 bg-blue-50 rounded-md">
             <p className="text-lg font-medium text-blue-800">
-              User ID: 123
+              User ID:{id}
             </p>
           </div>
 
@@ -26,11 +63,11 @@ const UserDetail = () => {
               <div className="space-y-2">
                 <div className="flex">
                   <span className="font-medium w-32">Username:</span>
-                  <span>john_doe</span>
+                  <span>{user.username}</span>
                 </div>
                 <div className="flex">
                   <span className="font-medium w-32">Email:</span>
-                  <span>john@example.com</span>
+                  <span>{user.email}</span>
                 </div>
                 <div className="flex">
                   <span className="font-medium w-32">Status:</span>
@@ -48,11 +85,11 @@ const UserDetail = () => {
               <div className="space-y-2">
                 <div className="flex">
                   <span className="font-medium w-32">Created:</span>
-                  <span>Dec 10, 2024</span>
+                  <span>{user.create_at}</span>
                 </div>
                 <div className="flex">
                   <span className="font-medium w-32">Last Update:</span>
-                  <span>Jan 15, 2025</span>
+                  <span>{user.update_at}</span>
                 </div>
                 <div className="flex">
                   <span className="font-medium w-32">Last Login:</span>
@@ -64,7 +101,7 @@ const UserDetail = () => {
 
           <div className="mt-8 flex space-x-4">
             <Link
-              to="/edit-user/123"
+              to={`/edit-user/${id}`}
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Edit User
